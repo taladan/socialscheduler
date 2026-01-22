@@ -1,0 +1,13 @@
+# No Keys or tokens
+secrets.json
+
+# No databases
+queue.json
+
+# No log files
+*.log
+cron_log.txt
+
+# No OS generated files
+.DS_Store
+
