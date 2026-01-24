@@ -1,0 +1,41 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    addressable (2.8.7)
+      public_suffix (>= 2.0.2, < 7.0)
+    base64 (0.2.0)
+    faraday (2.9.2)
+      faraday-net_http (>= 2.0, < 3.2)
+    faraday-multipart (1.0.4)
+      multipart-post (~> 2)
+    faraday-net_http (3.1.0)
+      net-http
+    io-wait (0.2.1)
+    json (2.12.2)
+    koala (3.6.0)
+      addressable
+      base64
+      faraday
+      faraday-multipart
+      json (>= 1.8)
+      rexml
+    multipart-post (2.4.1)
+    net-http (0.2.0)
+      net-protocol
+      uri
+    net-protocol (0.1.2)
+      io-wait
+      timeout
+    public_suffix (6.0.0)
+    rexml (3.2.5)
+    timeout (0.2.0)
+    uri (0.11.0)
+
+PLATFORMS
+  x86_64-linux
+
+DEPENDENCIES
+  koala
+
+BUNDLED WITH
+   2.3.7

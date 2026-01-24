@@ -3,8 +3,10 @@ require 'json'
 require 'time'
 
 # --- CONFIGURATION ---
-QUEUE_FILE = 'queue.json'
-SECRETS_FILE = 'secrets.json'
+ROOT_DIR = __dir__
+
+QUEUE_FILE = File.join(ROOT_DIR, 'queue.json')
+SECRETS_FILE = File.join(ROOT_DIR, 'secrets.json')
 
 # --- HELPER FUNCTIONS ---
 
@@ -117,7 +119,7 @@ when 'add'
   if message && time && image_path
     add_post(message, time, image_path)
   else
-    puts "Usage: ruby scheduler.rb add 'Message' 'YYYY-MM-DD HH:MM' '/path/to/image.jpg'"
+    puts "Usage: ruby socialscheduler.rb add 'Message' 'YYYY-MM-DD HH:MM' '/path/to/image.jpg'"
   end
 
 when 'run'
@@ -125,6 +127,6 @@ when 'run'
 
 else
   puts "Usage:"
-  puts "  To schedule: ruby scheduler.rb add 'Message' 'Time' 'Image_Path'"
-  puts "  To check/run: ruby scheduler.rb run"
+  puts "  To schedule: ruby socialcheduler.rb add 'Message' 'Time' 'Image_Path'"
+  puts "  To check/run: ruby socialscheduler.rb run"
 end
