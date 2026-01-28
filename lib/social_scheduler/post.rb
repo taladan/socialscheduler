@@ -1,6 +1,6 @@
 module SocialScheduler
   class Post
-    attr_accessor :id, :message, :time, :image_path, :status
+    attr_accessor :id, :message, :time, :image_path, :status, :platform
 
     def initialize(data = {})
       @id = data['id'] || Time.now.to_f.to_s
@@ -8,6 +8,7 @@ module SocialScheduler
       @time = data['time'] # Stored as string
       @image_path = data['image_path']
       @status = data['status'] || 'pending'
+      @platform = data['platform'] || 'facebook'
     end
 
     def to_h
@@ -16,7 +17,8 @@ module SocialScheduler
         'message' => @message,
         'time' => @time,
         'image_path' => @image_path,
-        'status' => @status
+        'status' => @status,
+        'platform' => @platform
       }
     end
 

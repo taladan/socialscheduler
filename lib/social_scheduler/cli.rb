@@ -28,6 +28,7 @@ module SocialScheduler
         opts.on("-m", "--message MESSAGE") { |m| options[:message] = m }
         opts.on("-i", "--image PATH") { |i| options[:image] = i }
         opts.on("-t", "--time TIME") { |t| options[:time] = t }
+        opts.on("-p", "--platform NAME", "Platform (facebook, twitter/x, mastodon, instagram)") { |p| options[:platform] = p}
       end.parse!(args)
       options
     end
@@ -47,7 +48,8 @@ module SocialScheduler
       post = Post.new(
         'message' => options[:message],
         'time' => scheduled_time.to_s,
-        'image_path' => image_path
+        'image_path' => image_path,
+        'platform' => (options[:platform] || 'facebook').downcase
       )
 
       if post.valid?
@@ -62,21 +64,33 @@ module SocialScheduler
       queue = Queue.new
       posts = queue.pending_posts
 
-      if posts.empty?
-        # Silent exit for cron
-        return
-      end
-
-      # Initialize Platform (Just Facebook for now)
-      fb = Platforms::Facebook.new
+      return if posts.empty? # Silent for cron
 
       posts.each do |post|
         begin
-          fb.post(post)
+          publisher = get_publisher_for(post.platform)
+          publisher.post(post)
+          
+          # Only remove if successful
           queue.remove(post.id)
         rescue StandardError => e
-          puts "❌ Error publishing post #{post.id}: #{e.message}"
+          puts "❌ Error publishing post #{post.id}   to #{post.platform}: #{e.message}"
         end
+      end
+    end
+
+    def get_publisher_for(platform_name)
+      case platform_name
+      when 'facebook'
+        return Platforms::Facebook.new
+      when 'twitter', 'x'
+        raise "Twitter support coming soon."
+      when 'mastodon'
+        raise "Mastodon support coming soon."
+      when 'instagram'
+        raise "Instagram support coming soon."
+      when 'bluesky'
+        raise "Bluesky support coming soon."
       end
     end
   end
