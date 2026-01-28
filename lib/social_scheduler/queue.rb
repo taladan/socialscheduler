@@ -22,6 +22,20 @@ module SocialScheduler
       save(posts)
     end
 
+    def update(updated_post)
+      posts = load
+      # Get matching index
+      index = posts.find_index { |p| p.id == updated_post.id }
+
+      if index
+        posts[index] = updated_post
+        save(posts)
+        return true
+      else
+        return false
+      end
+    end
+
     def pending_posts
       load.select { |p| p.due? }
     end
