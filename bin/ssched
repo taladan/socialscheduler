@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+# Add "lib" to the load path so we can require our files
+$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+
+require 'social_scheduler'
+
+SocialScheduler::CLI.start(ARGV)

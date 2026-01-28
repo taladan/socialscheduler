@@ -1,0 +1,30 @@
+{
+  "data": [
+    {
+      "access_token": "TOKEN HERE",
+      "category": "Library",
+      "category_list": [
+        {
+          "id": "ID HERE",
+          "name": "Library"
+        }
+      ],
+      "name": "Brooks County Public Library",
+      "id": "ID HERE",
+      "tasks": [
+        "MODERATE",
+        "MESSAGING",
+        "ANALYZE",
+        "ADVERTISE",
+        "CREATE_CONTENT",
+        "MANAGE"
+      ]
+    }
+  ],
+  "paging": {
+    "cursors": {
+      "before": "LETTERS AND NUMBERS HERE",
+      "after": "LETTERS AND NUMBERS HERE"
+    }
+  }
+}

@@ -3,7 +3,7 @@ require 'fileutils'
 # --- CONFIGURATION ---
 APP_DIR = Dir.pwd
 RUBY_PATH = `which ruby`.strip
-SCRIPT_PATH = File.join(APP_DIR, 'socialscheduler.rb')
+SCRIPT_PATH = File.join(APP_DIR, 'bin', 'ssched')
 SERVICE_NAME = 'socialscheduler'
 
 # Shortcommand
@@ -100,7 +100,7 @@ def install_cli_command
   wrapper_content = <<~BASH
     #!/bin/bash
     # Forward all arguments to the ruby script
-    #{RUBY_PATH} #{SCRIPT_PATH} "$0"
+    #{RUBY_PATH} #{SCRIPT_PATH} "$@"
   BASH
 
   File.write(wrapper_path, wrapper_content)
