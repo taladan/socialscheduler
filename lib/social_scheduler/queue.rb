@@ -31,5 +31,10 @@ module SocialScheduler
       posts.reject! { |p| p.id == post_id }
       save(posts)
     end
+
+    def find_by_prefix(prefix)
+      return [] if prefix.nil? || prefix.empty?
+      load.select { |p| p.id.start_with?(prefix)}
+    end
   end
 end

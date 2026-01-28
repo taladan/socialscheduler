@@ -3,7 +3,7 @@ module SocialScheduler
     attr_accessor :id, :message, :time, :image_path, :status, :platform
 
     def initialize(data = {})
-      @id = data['id'] || Time.now.to_f.to_s
+      @id = data['id'] || SecureRandom.uuid
       @message = data['message']
       @time = data['time'] # Stored as string
       @image_path = data['image_path']
