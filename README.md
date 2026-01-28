@@ -1,4 +1,4 @@
-i# SocialScheduler
+# SocialScheduler
 
 **SocialScheduler** (`ssched`) is a local, terminal-based automation tool for scheduling social media posts.
 
