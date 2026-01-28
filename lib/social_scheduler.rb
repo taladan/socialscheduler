@@ -32,5 +32,6 @@ module SocialScheduler
     autoload :Schedule, 'social_scheduler/commands/schedule'
     autoload :Edit, 'social_scheduler/commands/edit'
     autoload :Runner, 'social_scheduler/commands/runner'
+    autoload :Config, 'social_scheduler/commands/config'
   end
 end

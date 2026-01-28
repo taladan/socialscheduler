@@ -21,6 +21,8 @@ module SocialScheduler
         Commands::Edit.new(args[1], options).call
       when 'run'
         Commands::Runner.new.call
+      when 'config', 'setup'
+        Commands::Config.new.call
       else
         if options[:message] || options[:image]
           Commands::Schedule.new(options).call
@@ -35,6 +37,7 @@ module SocialScheduler
     def print_help
       puts "Usage:"
       puts "  ssched -m 'Msg' -t 'Time'   Schedule a post"
+      puts "  ssched config               Setup API keys"
       puts "  ssched list                 Show pending posts"
       puts "  ssched inspect [ID]         Show post details"
       puts "  ssched edit [ID] [flags]    Edit a post"

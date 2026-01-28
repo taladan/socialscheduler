@@ -1,7 +1,15 @@
 #!/usr/bin/env ruby
 
-# Add "lib" to the load path so we can require our files
-$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+require 'pathname'
+
+# 1. Find the REAL path of this file, resolving any symlinks
+current_script = Pathname.new(__FILE__).realpath
+
+# 2. Go up two levels (bin -> socialscheduler -> root)
+project_root = current_script.parent.parent
+
+# 3. Add the 'lib' folder to Ruby's load path
+$LOAD_PATH.unshift File.join(project_root, 'lib')
 
 require 'social_scheduler'
 
