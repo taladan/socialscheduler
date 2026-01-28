@@ -75,9 +75,11 @@ Designed for developers and system administrators who prefer the command line ov
 ## Usage
 
 ### Scheduling a Post
+
 Use the `-m` (message) and `-t` (time) flags. You can also attach an image with `-i`.
 
-```bash
+**Examples:**
+``` bash
 # Text post
 ssched -m "Deploying to production on a Friday. Wish me luck." -t "today at 4:30pm"
 
@@ -86,3 +88,76 @@ ssched -m "New logo concept" -i ./assets/logo.png -t "tomorrow morning"
 
 # Targeted platform (Defaults to Facebook)
 ssched -m "Short update" -p twitter -t "now"
+```
+
+### Managing the Queue
+
+**List pending posts:**
+
+**Command:**
+```bash
+ssched list
+```
+
+**Output:**
+```bash
+ID        | Platform | Scheduled Time                    | Message
+-------------------------------------------------------------------------------------
+a1b2c3d4  | facebook | Friday, Jan 30, 2026 at 4:30pm    | Deploying to production...
+```
+
+**Inspect a post** (Full Details): You only need the first few characters of the ID.
+``` Bash
+ssched inspect a1b2
+```
+
+**Edit a queued post:** Update only the fields you want to change.
+```bash
+ssched edit a1b2 -t "next friday"
+```
+
+**Fix a typo**
+```bash
+ssched edit a1b2 -m "Actually, deploying on Monday."
+```
+
+**Cancel a post:**
+```bash
+ssched cancel a1b2
+```
+
+SocialScheduler stores your configuration and queue in your home directory to ensure safety and persistence.
+
+    Credentials: ~/.socialscheduler/secrets.json (chmod 600)
+
+    Queue: ~/.socialscheduler/queue.json
+
+**Configure Platform Integration**:
+```bash
+ssched config
+```
+
+**Supported Platforms**
+
+
+| Platform  | Status         | Auth Requirement  |
+| --------- | -------------- | ----------------- |
+| Facebook  | ✅ Active       | Page Access Token |
+| Twitter/X | 🚧 Planned     | API Key & Secret  |
+
+
+Twitter/X	🚧 Planned	API Key & Secret
+Architecture
+
+SocialScheduler follows a modular architecture:
+
+    CLI: Handles argument parsing and user interaction.
+
+    Queue: Manages JSON-based persistence and UUID generation.
+
+    Runner: Checks for due posts and delegates to the appropriate Platform adapter.
+
+The application runs via a Systemd Timer (ssched.timer) which triggers the runner every minute. This eliminates the need for a memory-heavy resident process.
+
+
+This program is released under the MIT license.
