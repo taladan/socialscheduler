@@ -28,6 +28,7 @@ module SocialScheduler
         puts " 📮 Post Details"
         puts "========================================"
         puts "ID:       #{post.id}"
+        puts "Category: #{post.category}" || '(None)'
         puts "Series:   #{post.series_id || '(None)'}"
         puts "Platform: #{post.platform.capitalize}"
         puts "Time:     #{post.time}"

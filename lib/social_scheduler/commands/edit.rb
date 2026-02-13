@@ -30,6 +30,10 @@ module SocialScheduler
       private
 
       def apply_changes(post)
+        if @options[:category]
+          post.category = @options[:category]
+          puts "   - Category updated"
+        end
         if @options[:message]
           post.message = @options[:message]
           puts "   - Message updated"

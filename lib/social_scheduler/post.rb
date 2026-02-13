@@ -1,8 +1,9 @@
 module SocialScheduler
   class Post
-    attr_accessor :id, :series_id, :message, :time, :image_path, :status, :platform
+    attr_accessor :category, :id, :series_id, :message, :time, :image_path, :status, :platform
 
     def initialize(data = {})
+      @category = data['category']
       @id = data['id'] || SecureRandom.uuid
       @series_id = data['series_id']
       @message = data['message']
@@ -14,6 +15,7 @@ module SocialScheduler
 
     def to_h
       {
+        'category' => @category,
         'id' => @id,
         'series_id' => @series_id,
         'message' => @message,

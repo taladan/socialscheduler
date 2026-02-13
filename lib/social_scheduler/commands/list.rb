@@ -10,8 +10,8 @@ module SocialScheduler
           return
         end
 
-        layout = "%-9s | %-8s | %-35s | %-31s | %s"
-        puts layout % ["ID", "Platform", "Scheduled Time", "Message", "File name"]
+        layout = "%-9s | %-8s | %-15s | %-35s | %-31s | %s"
+        puts layout % ["ID", "Platform", "Category", "Scheduled Time", "Message", "File name"]
         puts "-" * 120
 
         posts.each do |p|
@@ -28,7 +28,7 @@ module SocialScheduler
             img_name = ""
           end
 
-          puts layout % [p.id[0..7], p.platform[0..7], time_str, msg, File.basename(img_name)]
+          puts layout % [p.id[0..7], p.platform[0..7], p.category, time_str, msg, File.basename(img_name)]
         end
       end
     end

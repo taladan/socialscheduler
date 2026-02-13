@@ -36,19 +36,21 @@ module SocialScheduler
 
     def print_help
       puts "Usage:"
-      puts "  ssched -m 'Msg' -t 'Time' -i 'path/to/image'    Schedule a post"
-      puts "  ssched config                                   Setup API keys"
-      puts "  ssched list                                     Show pending posts"
-      puts "  ssched inspect [ID]                             Show post details"
-      puts "  ssched edit [ID] [flags]                        Edit a post"
-      puts "  ssched cancel [ID]                              Remove a post"
-      puts "  ssched run                                      Force check"
+      puts "  ssched -m 'Msg' -t 'Time' -i 'path/to/image' -c 'Category'    Schedule one or more posts"
+      puts "  ssched config                                                 Setup API keys"
+      puts "  ssched list                                                   Show pending posts"
+      puts "  ssched inspect [ID]                                           Show post details"
+      puts "  ssched edit [ID] [flags]                                      Edit a post"
+      puts "  ssched cancel [ID]                                            Remove a post"
+      puts "  ssched cancel [ID] --series                                   Remove all posts in a series"
+      puts "  ssched run                                                    Force check"
     end
 
     def parse_options(args)
       options = {}
       OptionParser.new do |opts|
         opts.banner = "Usage: ssched [options]"
+        opts.on("-c", "--category CATEGORY") { |c| options[:category] = c }
         opts.on("-m", "--message MESSAGE") { |m| options[:message] = m }
         opts.on("-i", "--image PATH") { |i| options[:image] = i }
         opts.on("-t", "--time TIME") { |t| options[:time] = t }

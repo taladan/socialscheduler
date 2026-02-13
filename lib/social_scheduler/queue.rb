@@ -61,5 +61,10 @@ module SocialScheduler
       return [] if prefix.nil? || prefix.empty?
       load.select { |p| p.id.start_with?(prefix)}
     end
+
+    def find_by_category(category)
+      return [] if category.nil? || category.empty?
+      load.select { |p| p.category.downcase == category.downcase}
+    end
   end
 end
