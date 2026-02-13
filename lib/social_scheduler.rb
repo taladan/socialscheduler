@@ -20,6 +20,7 @@ module SocialScheduler
   autoload :Post, 'social_scheduler/post'
   autoload :Queue, 'social_scheduler/queue'
   autoload :CLI, 'social_scheduler/cli'
+  autoload :RecurrenceParser, 'social_scheduler/recurrence_parser'
   
   module Platforms
     autoload :Facebook, 'social_scheduler/platforms/facebook'

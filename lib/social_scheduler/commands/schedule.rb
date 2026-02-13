@@ -1,3 +1,5 @@
+require 'ice_cube' # Make sure to require this
+
 module SocialScheduler
   module Commands
     class Schedule
@@ -7,27 +9,60 @@ module SocialScheduler
 
       def call
         time_input = @options[:time]
-        scheduled_time = if time_input
-                           Chronic.parse(time_input) || Time.parse(time_input)
-                         else
-                           Time.now
-                         end
         
+        # Check for recurrence keywords
+        if RecurrenceParser.recurring?(time_input)
+          schedule_recurring(time_input)
+        else
+          schedule_single(time_input)
+        end
+      end
+
+      private
+
+      def schedule_single(time_input)
+        scheduled_time = Chronic.parse(time_input) || Time.parse(time_input) rescue Time.now
+        create_and_save(scheduled_time)
+        puts "✅ [#{@options[:platform] || 'Facebook'}] Scheduled for #{scheduled_time.strftime('%A, %b %d at %l:%M%P')}"
+      end
+
+      def schedule_recurring(time_input)
+        puts "🔄 Detected recurring schedule..."
+        times = RecurrenceParser.new(time_input).parse
+        
+        if times.empty?
+          puts "❌ Error: Could not generate dates from '#{time_input}'"
+          return
+        end
+
+        # Generate a shared ID for this batch
+        series_id = SecureRandom.hex(4)
+
+        times.each do |t|
+          create_and_save(t, series_id)
+        end
+
+        puts "✅ Scheduled #{times.count} posts!"
+        puts "   Series ID: #{series_id}"
+        puts "   First: #{times.first.strftime('%D %R')}"
+        puts "   Last:  #{times.last.strftime('%D %R')}"
+      end
+
+      def create_and_save(time_obj, series_id = nil)
         image_path = @options[:image] ? File.expand_path(@options[:image]) : nil
 
         post = Post.new(
+          'series_id' => series_id,
           'message' => @options[:message],
-          'time' => scheduled_time.to_s,
+          'time' => time_obj.to_s,
           'image_path' => image_path,
           'platform' => (@options[:platform] || 'facebook').downcase 
         )
 
         if post.valid?
           Queue.new.add(post)
-          puts "✅ [#{post.platform.capitalize}] Scheduled (ID: #{post.id[0..7]})"
-          puts "   Date: #{scheduled_time.strftime('%A, %b %d at %l:%M%P')}"
         else
-          puts "❌ Error: Must provide message or image."
+          puts "❌ Error: Post invalid."
         end
       end
     end

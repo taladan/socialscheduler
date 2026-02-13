@@ -16,7 +16,7 @@ module SocialScheduler
       when 'inspect', 'show'
         Commands::Inspect.new(args[1]).call
       when 'cancel', 'rm', 'delete'
-        Commands::Cancel.new(args[1]).call
+        Commands::Cancel.new(args[1], options).call
       when 'edit', 'update'
         Commands::Edit.new(args[1], options).call
       when 'run'
@@ -36,13 +36,13 @@ module SocialScheduler
 
     def print_help
       puts "Usage:"
-      puts "  ssched -m 'Msg' -t 'Time'   Schedule a post"
-      puts "  ssched config               Setup API keys"
-      puts "  ssched list                 Show pending posts"
-      puts "  ssched inspect [ID]         Show post details"
-      puts "  ssched edit [ID] [flags]    Edit a post"
-      puts "  ssched cancel [ID]          Remove a post"
-      puts "  ssched run                  Force check"
+      puts "  ssched -m 'Msg' -t 'Time' -i 'path/to/image'    Schedule a post"
+      puts "  ssched config                                   Setup API keys"
+      puts "  ssched list                                     Show pending posts"
+      puts "  ssched inspect [ID]                             Show post details"
+      puts "  ssched edit [ID] [flags]                        Edit a post"
+      puts "  ssched cancel [ID]                              Remove a post"
+      puts "  ssched run                                      Force check"
     end
 
     def parse_options(args)
@@ -53,6 +53,7 @@ module SocialScheduler
         opts.on("-i", "--image PATH") { |i| options[:image] = i }
         opts.on("-t", "--time TIME") { |t| options[:time] = t }
         opts.on("-p", "--platform NAME") { |p| options[:platform] = p }
+        opts.on("-s", "--series", "Apply to entire series") { |s| options[:series] = s}
         opts.on("-h", "--help") { print_help; exit }
       end.parse!(args)
       options

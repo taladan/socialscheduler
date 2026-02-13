@@ -46,6 +46,17 @@ module SocialScheduler
       save(posts)
     end
 
+    def remove_series(series_id)
+      return 0 if series_id.nil?
+
+      posts = load
+      original_count = posts.count 
+      posts.reject! { |p| p.series_id == series_id}
+
+      save(posts)
+      original_count - posts.count
+    end
+
     def find_by_prefix(prefix)
       return [] if prefix.nil? || prefix.empty?
       load.select { |p| p.id.start_with?(prefix)}

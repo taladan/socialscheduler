@@ -28,6 +28,7 @@ module SocialScheduler
         puts " 📮 Post Details"
         puts "========================================"
         puts "ID:       #{post.id}"
+        puts "Series:   #{post.series_id || '(None)'}"
         puts "Platform: #{post.platform.capitalize}"
         puts "Time:     #{post.time}"
         puts "Image:    #{post.image_path || '(None)'}"

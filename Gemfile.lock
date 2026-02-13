@@ -12,6 +12,7 @@ GEM
       multipart-post (~> 2)
     faraday-net_http (3.1.0)
       net-http
+    ice_cube (0.17.0)
     io-wait (0.2.1)
     json (2.12.2)
     koala (3.6.0)
@@ -51,6 +52,7 @@ PLATFORMS
 
 DEPENDENCIES
   chronic
+  ice_cube
   koala
   rspec
 
