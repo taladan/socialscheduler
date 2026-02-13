@@ -30,6 +30,7 @@ Designed for developers and system administrators who prefer the command line ov
 
 * **CLI-First Workflow:** Schedule, edit, and inspect posts entirely from the terminal.
 * **Natural Language Scheduling:** Supports intuitive dates like "tomorrow at 5pm", "next Tuesday", or "in 3 hours".
+* **Handling series posts:** Supports scheduling a series of posts like "Every other friday at 4:35pm, 3 times".
 * **Platform Support:**
     * **Facebook:** Fully implemented (Page publishing).
     * **Twitter/X:** Configuration supported (Publishing logic coming soon).
@@ -86,6 +87,12 @@ ssched -m "Deploying to production on a Friday. Wish me luck." -t "today at 4:30
 # Image post
 ssched -m "New logo concept" -i ./assets/logo.png -t "tomorrow morning"
 
+# Multiple posts on a given day - defaults to 4 posts if no multiple is given
+ssched -m "Repeating posts repeat every friday!" -t "Every friday at 4:30pm, 8 times"
+
+# Multiple alternating posts on a given day - defaults to 4 posts if no multiple is given
+ssched -m "Repeating posts repeat every friday!" -t "Every other friday at 4:30pm 4 times"
+
 # Targeted platform (Defaults to Facebook)
 ssched -m "Short update" -p twitter -t "now"
 ```
@@ -101,9 +108,9 @@ ssched list
 
 **Output:**
 ```bash
-ID        | Platform | Scheduled Time                    | Message
--------------------------------------------------------------------------------------
-a1b2c3d4  | facebook | Friday, Jan 30, 2026 at 4:30pm    | Deploying to production...
+ID        | Platform | Scheduled Time                      | Message                         | File name
+------------------------------------------------------------------------------------------------------------------------
+a1b2c3d4  | facebook | Friday, Jan 30, 2026 at 4:30pm      | Deploying to production...      | production_file.jpeg
 ```
 
 **Inspect a post** (Full Details): You only need the first few characters of the ID.
@@ -123,7 +130,11 @@ ssched edit a1b2 -m "Actually, deploying on Monday."
 
 **Cancel a post:**
 ```bash
+# Cancel a single post
 ssched cancel a1b2
+
+# Cancel all posts in a series
+ssched cancel a1b2 --series
 ```
 
 SocialScheduler stores your configuration and queue in your home directory to ensure safety and persistence.
