@@ -36,7 +36,14 @@ module SocialScheduler
 
     def print_help
       puts "Usage:"
-      puts "  ssched -m 'Msg' -t 'Time' -i 'path/to/image' -c 'Category'    Schedule one or more posts"
+      puts "  ssched [-miatc]                 Schedule one or more posts"
+      puts "    Flags:"
+      puts "      -m MESSAGE                      Add MESSAGE to post"
+      puts "      -i PATH/TO/IMAGE.JPG            Add image to post"
+      puts "      -a ALT-TEXT                     Add alt text to image"
+      puts "      -t TIME                         Schedule post at TIME"
+      puts "      -c CATEGORY                     Set post category"
+      puts " "
       puts "  ssched config                                                 Setup API keys"
       puts "  ssched list                                                   Show pending posts"
       puts "  ssched inspect [ID]                                           Show post details"
@@ -53,6 +60,7 @@ module SocialScheduler
         opts.on("-c", "--category CATEGORY") { |c| options[:category] = c }
         opts.on("-m", "--message MESSAGE") { |m| options[:message] = m }
         opts.on("-i", "--image PATH") { |i| options[:image] = i }
+        opts.on("-a", "--alt TEXT", "Alt text for screen readers") { |a| options[:alt] = a}
         opts.on("-t", "--time TIME") { |t| options[:time] = t }
         opts.on("-p", "--platform NAME") { |p| options[:platform] = p }
         opts.on("-s", "--series", "Apply to entire series") { |s| options[:series] = s}

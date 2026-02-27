@@ -10,10 +10,14 @@ module SocialScheduler
         puts "   Attempting to publish to Facebook..."
         
         if post_object.image_path && File.exist?(post_object.image_path)
-          @api.put_picture(
-            post_object.image_path, 
-            { caption: post_object.message }
-          )
+          params = { caption: post_object.message }
+
+          if post_object.alt_text && !post_object.alt_text.empty?
+            params[:alt_text_custom] = post_object.alt_text
+          end
+
+          @api.put_picture(post_object.image_path, params) 
+        
         elsif post_object.message
           @api.put_connections("me", "feed", message: post_object.message)
         end

@@ -16,50 +16,83 @@ module SocialScheduler
         return puts "❌ No post found." if candidates.empty?
         return puts "⚠️  Ambiguous ID." if candidates.count > 1
 
-        post = candidates.first
-        apply_changes(post)
+        target_post = candidates.first
         
-        if post.valid?
-          queue.update(post)
-          puts "✅ Changes saved!"
+        all_posts = queue.load
+        posts_to_edit = []
+
+        if @options[:series]
+          if target_post.series_id.nil?
+            puts "⚠️  Post #{target_post.id[0..7]} is not part of a series."
+            puts "   Editing only this single post."
+            posts_to_edit << all_posts.find { |p| p.id == target_post.id }
+          else
+            posts_to_edit = all_posts.select { |p| p.series_id == target_post.series_id }
+            puts "🔄 Editing series (#{posts_to_edit.count} posts)..."
+          end
         else
-          puts "❌ Error: Invalid post. Changes NOT saved."
+          posts_to_edit << all_posts.find { |p| p.id == target_post.id }
+        end
+
+        changes_summary = []
+        
+        posts_to_edit.each do |post|
+          changes_summary = apply_changes(post) # Returns list of what changed
+        end
+
+        if posts_to_edit.all?(&:valid?)
+          queue.save(all_posts)
+          
+          puts "✅ Saved changes to #{posts_to_edit.count} post(s):"
+          changes_summary.uniq.each { |msg| puts "   - #{msg}" }
+        else
+          puts "❌ Error: One or more posts became invalid. Changes NOT saved."
         end
       end
 
       private
 
       def apply_changes(post)
+        changes = []
+
         if @options[:category]
           post.category = @options[:category]
-          puts "   - Category updated"
+          changes << "Category updated to '#{@options[:category]}'"
         end
+
         if @options[:message]
           post.message = @options[:message]
-          puts "   - Message updated"
+          changes << "Message updated"
         end
 
         if @options[:image]
           path = File.expand_path(@options[:image])
           if File.exist?(path)
             post.image_path = path
-            puts "   - Image updated"
+            changes << "Image updated"
           else
-            puts "❌ Error: Image not found at #{path}" 
+            puts "❌ Warning: Image not found at #{path} (Skipped)" 
           end
+        end
+
+        if @options[:alt]
+          post.alt_text = @options[:alt]
+          changes << "Alt text updated"
         end
 
         if @options[:time]
           if new_time = (Chronic.parse(@options[:time]) rescue nil)
             post.time = new_time.to_s
-            puts "   - Time rescheduled: #{new_time}"
+            changes << "Time rescheduled to #{new_time}"
           end
         end
 
         if @options[:platform]
           post.platform = @options[:platform].downcase
-          puts "   - Platform changed: #{post.platform}"
+          changes << "Platform changed to #{post.platform}"
         end
+
+        changes
       end
     end
   end

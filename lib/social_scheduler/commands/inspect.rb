@@ -33,6 +33,7 @@ module SocialScheduler
         puts "Platform: #{post.platform.capitalize}"
         puts "Time:     #{post.time}"
         puts "Image:    #{post.image_path || '(None)'}"
+        puts "Alt text: #{post.alt_text || '(None)'}"
         puts "Status:   #{post.status}"
         puts "----------------------------------------"
         puts "MESSAGE:"

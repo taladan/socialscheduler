@@ -52,10 +52,12 @@ module SocialScheduler
         image_path = @options[:image] ? File.expand_path(@options[:image]) : nil
 
         post = Post.new(
+          'category' => @options[:category],
           'series_id' => series_id,
           'message' => @options[:message],
           'time' => time_obj.to_s,
           'image_path' => image_path,
+          'alt_text' => @options[:alt],
           'platform' => (@options[:platform] || 'facebook').downcase 
         )
 
