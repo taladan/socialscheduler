@@ -3,13 +3,24 @@ require 'chronic'
 
 module SocialScheduler
   class RecurrenceParser
-    def initialize(input_string)
+    def initialize(input_string, options = {})
       @input = input_string.downcase
+      @options = options
     end
 
     def parse
-      base_time_str = @input.match(/at\s+(\d{1,2}(?::\d{2})?\s*(?:am|pm)?)/i)
-      base_time = base_time_str ? Chronic.parse(base_time_str[1]) : Time.now
+      time_match = @input.match(/at\s+(\d{1,2}(?::\d{2})?\s*(?:am|pm)?)/i)
+      time_part = time_match ? time_match[1] : "12:00pm"
+
+      if @options[:start]
+        base_time = Chronic.parse*("#{options[:start]} at #{time_part}")
+      else
+        base_time = Chronic.parse(time_part) || Time.now
+      end
+      
+      # Old base time match
+      # base_time_str = @input.match(/at\s+(\d{1,2}(?::\d{2})?\s*(?:am|pm)?)/i)
+      # base_time = base_time_str ? Chronic.parse(base_time_str[1]) : Time.now
 
       interval = 1
       if @input.include?("every other") || @input.include?("alternate") || @input.include?("alternating")
@@ -36,7 +47,10 @@ module SocialScheduler
       limit_match = @input.match(/(\d+)\s+times/)
       until_match = @input.match(/until\s+(.+)/)
 
-      if limit_match
+      if @options[:end]
+        end_date = Chronic.parse("#{@options[:end]} at 11:59pm", context: :future)
+        rule.until(end_date) if end_date
+      elsif limit_match
         count = limit_match[1].to_i
         rule.count(count)
       elsif until_match

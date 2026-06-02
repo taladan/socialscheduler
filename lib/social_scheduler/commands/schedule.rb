@@ -28,7 +28,7 @@ module SocialScheduler
 
       def schedule_recurring(time_input)
         puts "🔄 Detected recurring schedule..."
-        times = RecurrenceParser.new(time_input).parse
+        times = RecurrenceParser.new(time_input, @options).parse
         
         if times.empty?
           puts "❌ Error: Could not generate dates from '#{time_input}'"

@@ -43,6 +43,8 @@ module SocialScheduler
       puts "      -a ALT-TEXT                     Add alt text to image"
       puts "      -t TIME                         Schedule post at TIME"
       puts "      -c CATEGORY                     Set post category"
+      puts "      -b DATE                         Begining date for a series"
+      puts "      -e DATE                         End date for a series"
       puts " "
       puts "  ssched config                                                 Setup API keys"
       puts "  ssched list                                                   Show pending posts"
@@ -65,6 +67,8 @@ module SocialScheduler
         opts.on("-p", "--platform NAME") { |p| options[:platform] = p }
         opts.on("-s", "--series", "Apply to entire series") { |s| options[:series] = s}
         opts.on("-h", "--help") { print_help; exit }
+        opts.on("-b", "--begin DATE", "Begin date for recurring posts ") { |b| options[:start] = b}
+        opts.on("-e", "--end DATE", "End date for recurring posts ") { |e| options[:end] = e}
       end.parse!(args)
       options
     end
