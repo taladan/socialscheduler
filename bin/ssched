@@ -8,6 +8,10 @@ current_script = Pathname.new(__FILE__).realpath
 # 2. Go up two levels (bin -> socialscheduler -> root)
 project_root = current_script.parent.parent
 
+# 2a. Locate Gemfile for bundler
+ENV['BUNDLE_GEMFILE'] = File.join(project_root, 'Gemfile')
+require 'bundler/setup'
+
 # 3. Add the 'lib' folder to Ruby's load path
 $LOAD_PATH.unshift File.join(project_root, 'lib')
 
