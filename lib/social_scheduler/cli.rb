@@ -23,6 +23,8 @@ module SocialScheduler
         Commands::Runner.new.call
       when 'config', 'setup'
         Commands::Config.new.call
+      when 'copy', 'cp', 'duplicate', 'dupe', 'replicate', 'xerox'
+        Commands::Copy.new(args[1], options).call
       else
         if options[:message] || options[:image]
           Commands::Schedule.new(options).call
@@ -50,6 +52,7 @@ module SocialScheduler
       puts "  ssched list                                                   Show pending posts"
       puts "  ssched inspect [ID]                                           Show post details"
       puts "  ssched edit [ID] [flags]                                      Edit a post"
+      puts "  ssched copy [ID] -t TIME [-b START -e END]"
       puts "  ssched cancel [ID]                                            Remove a post"
       puts "  ssched cancel [ID] --series                                   Remove all posts in a series"
       puts "  ssched run                                                    Force check"
