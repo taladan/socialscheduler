@@ -44,7 +44,7 @@ module SocialScheduler
       def render_table(posts)
         layout = "%-9s | %-8s | %-15s | %-35s | %-31s | %s"
         
-        # Header doesn't get striped
+        # don't strip header
         puts layout % ["ID", "Platform", "Category", "Scheduled Time", "Message", "File name"]
         puts "-" * 130
 
@@ -58,15 +58,13 @@ module SocialScheduler
 
           img_name = (p.image_path && !p.image_path.empty?) ? File.basename(p.image_path) : ""
 
-          # Build the string for the row
           row_text = layout % [p.id[0..7], p.platform[0..7], p.category || "None", time_str, msg, img_name]
 
           # Apply Zebra Striping
           if index.even?
             puts row_text
           else
-            # Wrap the odd rows in our background color and reset it at the end
-            # We add spaces to the end of the text to ensure the background color fills the whole terminal width
+            # add space to ensure the background color fills
             puts "#{STRIPE_BG}#{row_text.ljust(130)}#{RESET}"
           end
         end
@@ -93,7 +91,7 @@ module SocialScheduler
           puts "\n📁 #{group_name.to_s.upcase} (#{group_posts.count} posts)"
           puts "-" * 130 # Expanded line to match table width
           
-          # Sort chronologically and add an index to track the row number inside each group
+          # chronological sort
           group_posts.sort_by { |p| Time.parse(p.time) }.each_with_index do |p, index|
             time_str = Time.parse(p.time).strftime('%m/%d/%y @ %I:%M%P')
             msg = p.message ? p.message[0..40].gsub("\n"," ") + '...' : '(Image Only)'
@@ -102,7 +100,7 @@ module SocialScheduler
             
             row_text = "   [#{p.id[0..7]}]  🗓️  #{time_str.ljust(18)} #{cat} 📝 #{msg.ljust(45)}#{img_indicator}"
 
-            # Apply Zebra Striping
+            # zebrastripe
             if index.even?
               puts row_text
             else

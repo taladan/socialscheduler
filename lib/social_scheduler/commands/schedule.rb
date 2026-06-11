@@ -1,4 +1,4 @@
-require 'ice_cube' # Make sure to require this
+require 'ice_cube' 
 
 module SocialScheduler
   module Commands
@@ -8,9 +8,21 @@ module SocialScheduler
       end
 
       def call
+        # 1. THE GUARD CLAUSE: Validate Image Existence FIRST
+        if @options[:image]
+          expanded_path = File.expand_path(@options[:image])
+          unless File.exist?(expanded_path)
+            puts "❌ Error: Image file not found at '#{expanded_path}'"
+            puts "   Please check your spelling or ensure you are in the correct directory."
+            return # Abort the whole scheduling process immediately!
+          end
+          # Save the absolute path so we don't have to keep expanding it later
+          @options[:image] = expanded_path 
+        end
+
         time_input = @options[:time]
         
-        # Check for recurrence keywords
+        # 2. Check for recurrence keywords
         if RecurrenceParser.recurring?(time_input)
           schedule_recurring(time_input)
         else
@@ -44,12 +56,13 @@ module SocialScheduler
 
         puts "✅ Scheduled #{times.count} posts!"
         puts "   Series ID: #{series_id}"
-        puts "   First: #{times.first.strftime('%D %R')}"
-        puts "   Last:  #{times.last.strftime('%D %R')}"
+        puts "   First: #{times.first.strftime('%m/%d/%y %H:%M')}"
+        puts "   Last:  #{times.last.strftime('%m/%d/%y %H:%M')}"
       end
 
       def create_and_save(time_obj, series_id = nil)
-        image_path = @options[:image] ? File.expand_path(@options[:image]) : nil
+        # We can just pass the image directly now, because we already validated it above!
+        image_path = @options[:image]
 
         post = Post.new(
           'category' => @options[:category],
@@ -64,7 +77,7 @@ module SocialScheduler
         if post.valid?
           Queue.new.add(post)
         else
-          puts "❌ Error: Post invalid."
+          puts "❌ Error: Post invalid. (Requires either a message or an image)"
         end
       end
     end
