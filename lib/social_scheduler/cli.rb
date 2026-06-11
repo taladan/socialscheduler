@@ -12,7 +12,7 @@ module SocialScheduler
 
       case command
       when 'list'
-        Commands::List.new.call
+        Commands::List.new(options).call
       when 'inspect', 'show'
         Commands::Inspect.new(args[1]).call
       when 'cancel', 'rm', 'delete'
@@ -72,6 +72,7 @@ module SocialScheduler
         opts.on("-h", "--help") { print_help; exit }
         opts.on("-b", "--begin DATE", "Begin date for recurring posts ") { |b| options[:start] = b}
         opts.on("-e", "--end DATE", "End date for recurring posts ") { |e| options[:end] = e}
+        opts.on("-g", "--group FIELD", "Group list by category, series, image, or message") { |g| options[:group] = g }
       end.parse!(args)
       options
     end
